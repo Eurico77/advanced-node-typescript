@@ -4,5 +4,17 @@
   "main": "index.js",
   "repository": "git@github.com:Eurico77/advanced-node-typescript.git",
   "author": "eurico77 <euricomagalhaes61@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "build": "rimraf dist && tsc"
+  },
+  "devDependencies": {
+    "typescript": "^4.5.5"
+  },
+  "engines": {
+    "node": "16.x"
+  },
+  "dependencies": {
+    "rimraf": "^3.0.2"
+  }
 }
