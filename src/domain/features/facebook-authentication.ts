@@ -9,6 +9,5 @@ export namespace FacebookAuthentication {
   export type Params = {
     token: string
   }
-
   export type Result = AccessToken | AuthenticationError
 }
