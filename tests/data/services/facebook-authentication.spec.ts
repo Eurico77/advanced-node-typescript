@@ -2,31 +2,29 @@ import { AuthenticationError } from '@/domain/errors'
 import { FacebookAuthentication } from '@/domain/features'
 
 class FacebookAuthenticationService {
-  constructor (private readonly loadFacebookUserByTokenApi: LoadFacebookUser) { }
+  constructor (private readonly loadFacebookUserApi: LoadFacebookUserApi) { }
 
   async perform (params: FacebookAuthentication.Params): Promise<AuthenticationError> {
-    await this.loadFacebookUserByTokenApi.loadUser(params)
+    await this.loadFacebookUserApi.loadUser(params)
     return new AuthenticationError()
   }
 }
 
-interface LoadFacebookUser {
-  loadUser: (params: LoadFacebookUserApi.Params) => Promise<LoadFacebookUserApi.Result>
+interface LoadFacebookUserApi {
+  loadUser: (params: LoadFacebookUserApi.Params) => Promise<void>
 }
 
 namespace LoadFacebookUserApi {
   export type Params = {
     token: string
   }
-
-  export type Result = undefined
 }
 
-class LoadFacebookUserApiSpy implements LoadFacebookUser {
+class LoadFacebookUserApiSpy implements LoadFacebookUserApi {
   token?: string
   result?: undefined
 
-  async loadUser (params: LoadFacebookUserApi.Params): Promise<LoadFacebookUserApi.Result> {
+  async loadUser (params: LoadFacebookUserApi.Params): Promise<void> {
     this.token = params.token
     return this.result
   }
@@ -34,12 +32,12 @@ class LoadFacebookUserApiSpy implements LoadFacebookUser {
 
 describe('FacebookAuthenticationService', () => {
   it('should call LoadFacebookUserApi with correct params', async () => {
-    const loadFacebookUserByTokenApi = new LoadFacebookUserApiSpy()
-    const sut = new FacebookAuthenticationService(loadFacebookUserByTokenApi)
+    const loadFacebookUserApi = new LoadFacebookUserApiSpy()
+    const sut = new FacebookAuthenticationService(loadFacebookUserApi)
 
     await sut.perform({ token: 'token' })
 
-    expect(loadFacebookUserByTokenApi.token).toBe('token')
+    expect(loadFacebookUserApi.token).toBe('token')
   })
 
   it('should return AutheticationError when LoadFacebookUserApi returns undefined', async () => {
