@@ -13,6 +13,7 @@ describe('FacebookAuthenticationService', () => {
     loadFacebookUserApi = mock()
     sut = new FacebookAuthenticationService(loadFacebookUserApi)
   })
+
   it('should call LoadFacebookUserApi with correct params', async () => {
     await sut.perform({ token })
 
